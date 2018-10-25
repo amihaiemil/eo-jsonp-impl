@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.amihaiemil.web</groupId>
 	<artifactId>eo-jsonp-impl</artifactId>
-	<version>0.0.5-SNAPSHOT</version><!--rrv-sed-flag-->
+	<version>0.0.1-SNAPSHOT</version><!--rrv-sed-flag-->
 	<name>EO JSON-P Implementation</name>
 	<description>An elegant, object-oriented, implementation of the JSON-P specification (JSR 374)</description>
 	<url>https://github.com/amihaiemil/eo-jsonp-impl</url>
