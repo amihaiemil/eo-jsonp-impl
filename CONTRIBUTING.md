@@ -4,7 +4,7 @@
 
 1. If it's a bug, please clearly state what is the actual behaviour and what is the expected one. A PR with a failing unit test, to prove its existence, would be highly appreciated.
 
-2. If it's a feature request, clearly state what is missing with a link to Docker's API documentation of said method(s). A PR here, with the start of the solution, would also be appreciated (see PR rules below). 
+2. If it's a feature request, clearly state what is missing with a link to JSON-P's documentation of said method(s). A PR here, with the start of the solution, would also be appreciated (see PR rules below). 
 
 ## For Pull Requests:
 
