@@ -25,95 +25,132 @@
  */
 package com.amihaiemil.eojsonp;
 
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import javax.json.JsonValue;
 import javax.json.stream.JsonGenerator;
 
 /**
- * Base JsonGenerator implementation. Rt stands for "runtime".
+ * Abstract JsonGenerator containing convenience writing methods.
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
- * @todo #8:30min Continue implementing and unit testing this class.
- *  Follow an "object-first" approach: that is, we should implement
- *  the situation itself through objects rather than writing
- *  procedural code to deal with the situation. We will have multiple
- *  implementations of JsonGenerator (primarily for Object and array) which
- *  will know when it is possible to add some value and when not.
+ * @todo #8:30min Add implementations for JsonNumber and JsonString. They should
+ *  also be unit tested and used in this class to delegate the convenience
+ *  writing methods to the JsonValue ones.
  */
-final class RtJsonGenerator extends ConvenientJsonGenerator {
-
-    /**
-     * Write it somewhere.
-     */
-    private final Writer writer;
-    
-    /**
-     * Ctor.
-     * @param output Stream to write to.
-     */
-    RtJsonGenerator(final OutputStream output) {
-        this(new OutputStreamWriter(output));
-    }
-    
-    /**
-     * Ctor.
-     * @param writer Writer to use.
-     */
-    RtJsonGenerator(final Writer writer) {
-        this.writer = writer;
-    }
+abstract class ConvenientJsonGenerator implements JsonGenerator {
     
     @Override
-    public JsonGenerator writeStartObject() {
+    public abstract JsonGenerator writeStartObject();
+
+    @Override
+    public abstract JsonGenerator writeStartObject(final String name);
+
+    @Override
+    public abstract JsonGenerator writeKey(final String name);
+
+    @Override
+    public abstract JsonGenerator writeStartArray();
+
+    @Override
+    public abstract JsonGenerator writeStartArray(final String name);
+
+    @Override
+    public abstract JsonGenerator write(
+        final String name, final JsonValue value
+    );
+    
+    @Override
+    public abstract JsonGenerator write(final JsonValue value);
+    
+    @Override
+    public abstract JsonGenerator writeEnd();
+    
+    @Override
+    public JsonGenerator write(final String name, final String value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator writeStartObject(final String name) {
+    public JsonGenerator write(final String name, final BigInteger value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator writeKey(final String name) {
+    public JsonGenerator write(final String name, final BigDecimal value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator writeStartArray() {
+    public JsonGenerator write(final String name, final int value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator writeStartArray(final String name) {
+    public JsonGenerator write(final String name, final long value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator write(final String name, final JsonValue value) {
+    public JsonGenerator write(final String name, final double value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator writeEnd() {
+    public JsonGenerator write(final String name, final boolean value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonGenerator write(final JsonValue value) {
+    public JsonGenerator writeNull(final String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void close() {
+    public JsonGenerator write(final String value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void flush() {
+    public JsonGenerator write(final BigDecimal value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
+
+    @Override
+    public JsonGenerator write(final BigInteger value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator write(final int value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator write(final long value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator write(final double value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator write(final boolean value) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator writeNull() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public abstract void close();
+
+    @Override
+    public abstract void flush();
     
 }
