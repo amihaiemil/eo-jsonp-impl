@@ -41,7 +41,7 @@ import org.junit.Test;
  * @version $Id$
  * @since 0.0.1
  */
-public class RtJsonProviderTestCase {
+public final class RtJsonProviderTestCase {
     
     /**
      * RtJsonProvider can create a JsonParser from a Reader.

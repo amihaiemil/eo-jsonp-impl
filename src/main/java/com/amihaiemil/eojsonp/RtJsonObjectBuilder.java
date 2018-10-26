@@ -41,60 +41,60 @@ import javax.json.JsonValue;
 final class RtJsonObjectBuilder implements JsonObjectBuilder {
 
     @Override
-    public JsonObjectBuilder add(final String string, final JsonValue jv) {
+    public JsonObjectBuilder add(final String name, final JsonValue value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final String string1) {
+    public JsonObjectBuilder add(final String name, final String value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final BigInteger bi) {
+    public JsonObjectBuilder add(final String name, final BigInteger value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final BigDecimal bd) {
+    public JsonObjectBuilder add(final String name, final BigDecimal value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final int i) {
+    public JsonObjectBuilder add(final String name, final int value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final long l) {
+    public JsonObjectBuilder add(final String name, final long value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final double d) {
+    public JsonObjectBuilder add(final String name, final double value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder add(final String string, final boolean bln) {
+    public JsonObjectBuilder add(final String name, final boolean value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonObjectBuilder addNull(final String string) {
+    public JsonObjectBuilder addNull(final String name) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public JsonObjectBuilder add(
-        final String string, final JsonObjectBuilder job
+        final String name, final JsonObjectBuilder builder
     ) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public JsonObjectBuilder add(
-        final String string, final JsonArrayBuilder jab
+        final String name, final JsonArrayBuilder builder
     ) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
@@ -103,5 +103,4 @@ final class RtJsonObjectBuilder implements JsonObjectBuilder {
     public JsonObject build() {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
 }

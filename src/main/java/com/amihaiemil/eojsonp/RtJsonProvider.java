@@ -48,6 +48,9 @@ import javax.json.stream.JsonParserFactory;
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
+ * @todo #6:30min Continue implementing and unit testing the other methods of
+ *  RtJsonProvider. Also start implementing dependent classes such as
+ *  RtJsonObjectBuilder.
  */
 final class RtJsonProvider extends JsonProvider {
 
@@ -57,58 +60,8 @@ final class RtJsonProvider extends JsonProvider {
     }
 
     @Override
-    public JsonParser createParser(final InputStream in) {
-       return new RtJsonParser(in);
-    }
-
-    @Override
-    public JsonParserFactory createParserFactory(Map<String, ?> map) {
-        throw new UnsupportedOperationException("Not supported yet."); 
-    }
-
-    @Override
-    public JsonGenerator createGenerator(Writer writer) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonGenerator createGenerator(OutputStream out) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonGeneratorFactory createGeneratorFactory(Map<String, ?> map) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonReader createReader(Reader reader) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonReader createReader(InputStream in) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonWriter createWriter(Writer writer) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonWriter createWriter(OutputStream out) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonWriterFactory createWriterFactory(Map<String, ?> map) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public JsonReaderFactory createReaderFactory(Map<String, ?> map) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public JsonParser createParser(final InputStream input) {
+        return new RtJsonParser(input);
     }
 
     @Override
@@ -122,8 +75,66 @@ final class RtJsonProvider extends JsonProvider {
     }
 
     @Override
-    public JsonBuilderFactory createBuilderFactory(Map<String, ?> map) {
+    public JsonParserFactory createParserFactory(final Map<String, ?> config) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
-    
+
+    @Override
+    public JsonGenerator createGenerator(final Writer writer) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGenerator createGenerator(final OutputStream out) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonGeneratorFactory createGeneratorFactory(
+        final Map<String, ?> config
+    ) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonReader createReader(final Reader reader) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonReader createReader(final InputStream input) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonWriter createWriter(final Writer writer) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonWriter createWriter(final OutputStream out) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonWriterFactory createWriterFactory(
+        final Map<String, ?> config
+    ) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonReaderFactory createReaderFactory(
+        final Map<String, ?> config
+    ) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public JsonBuilderFactory createBuilderFactory(
+        final Map<String, ?> config
+    ) {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
 }

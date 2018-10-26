@@ -41,42 +41,42 @@ import javax.json.JsonValue;
 final class RtJsonArrayBuilder implements JsonArrayBuilder {
 
     @Override
-    public JsonArrayBuilder add(final JsonValue jv) {
+    public JsonArrayBuilder add(final JsonValue value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final String string) {
+    public JsonArrayBuilder add(final String value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final BigDecimal bd) {
+    public JsonArrayBuilder add(final BigDecimal value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final BigInteger bi) {
+    public JsonArrayBuilder add(final BigInteger value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final int i) {
+    public JsonArrayBuilder add(final int value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final long l) {
+    public JsonArrayBuilder add(final long value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final double d) {
+    public JsonArrayBuilder add(final double value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final boolean bln) {
+    public JsonArrayBuilder add(final boolean value) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
@@ -86,12 +86,12 @@ final class RtJsonArrayBuilder implements JsonArrayBuilder {
     }
 
     @Override
-    public JsonArrayBuilder add(final JsonObjectBuilder job) {
+    public JsonArrayBuilder add(final JsonObjectBuilder builder) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public JsonArrayBuilder add(final JsonArrayBuilder jab) {
+    public JsonArrayBuilder add(final JsonArrayBuilder builder) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
