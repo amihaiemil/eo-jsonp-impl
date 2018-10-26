@@ -48,9 +48,9 @@ import javax.json.stream.JsonParserFactory;
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
- * @todo #6:30min Continue implementing and unit testing the other methods of
+ * @todo #8:30min Continue implementing and unit testing the other methods of
  *  RtJsonProvider. Also start implementing dependent classes such as
- *  RtJsonObjectBuilder.
+ *  RtJsonArrayBuilder.
  */
 final class RtJsonProvider extends JsonProvider {
 
@@ -81,12 +81,12 @@ final class RtJsonProvider extends JsonProvider {
 
     @Override
     public JsonGenerator createGenerator(final Writer writer) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new RtJsonGenerator(writer);
     }
 
     @Override
     public JsonGenerator createGenerator(final OutputStream out) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new RtJsonGenerator(out);
     }
 
     @Override

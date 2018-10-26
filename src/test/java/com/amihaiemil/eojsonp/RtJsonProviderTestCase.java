@@ -26,10 +26,13 @@
 package com.amihaiemil.eojsonp;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import javax.json.JsonArrayBuilder;
 import javax.json.JsonObjectBuilder;
 import javax.json.spi.JsonProvider;
+import javax.json.stream.JsonGenerator;
 import javax.json.stream.JsonParser;
 import org.hamcrest.MatcherAssert;
 import org.hamcrest.Matchers;
@@ -100,6 +103,36 @@ public final class RtJsonProviderTestCase {
             prov.createArrayBuilder(),
             Matchers.allOf(
                 Matchers.instanceOf(JsonArrayBuilder.class),
+                Matchers.notNullValue()
+            )
+        );
+    }
+    
+    /**
+     * RtJsonProvider can create a JsonGenerator from a Writer.
+     */
+    @Test
+    public void createsGeneratorFromWriter() {
+        final JsonProvider prov = new RtJsonProvider();
+        MatcherAssert.assertThat(
+            prov.createGenerator(new StringWriter()),
+            Matchers.allOf(
+                Matchers.instanceOf(JsonGenerator.class),
+                Matchers.notNullValue()
+            )
+        );
+    }
+    
+    /**
+     * RtJsonProvider can create a JsonGenerator from an OutputStream.
+     */
+    @Test
+    public void createsGeneratorFromOutputStream() {
+        final JsonProvider prov = new RtJsonProvider();
+        MatcherAssert.assertThat(
+            prov.createGenerator(new ByteArrayOutputStream()),
+            Matchers.allOf(
+                Matchers.instanceOf(JsonGenerator.class),
                 Matchers.notNullValue()
             )
         );
