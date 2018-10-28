@@ -65,7 +65,7 @@ final class RtJsonString implements JsonString {
 
     @Override
     public int hashCode() {
-        return this.value.hashCode();
+        return String.valueOf(this.value).hashCode();
     }
 
     @Override
