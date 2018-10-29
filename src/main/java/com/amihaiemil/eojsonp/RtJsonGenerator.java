@@ -36,12 +36,6 @@ import javax.json.stream.JsonGenerator;
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
- * @todo #8:30min Continue implementing and unit testing this class.
- *  Follow an "object-first" approach: that is, we should implement
- *  the situation itself through objects rather than writing
- *  procedural code to deal with the situation. We will have multiple
- *  implementations of JsonGenerator (primarily for Object and array) which
- *  will know when it is possible to add some value and when not.
  */
 final class RtJsonGenerator extends ConvenientJsonGenerator {
 
@@ -68,42 +62,57 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     
     @Override
     public JsonGenerator writeStartObject() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new StartObject();
     }
 
     @Override
     public JsonGenerator writeStartObject(final String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException(
+            "Cannot write named JsonArray, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
     public JsonGenerator writeKey(final String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new WriteJsonValue();
     }
 
     @Override
     public JsonGenerator writeStartArray() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        return new StartArray();
     }
 
     @Override
     public JsonGenerator writeStartArray(final String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException(
+            "Cannot write named JsonArray, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
     public JsonGenerator write(final String name, final JsonValue value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException(
+            "Cannot write named JsonValue, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
     public JsonGenerator writeEnd() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException(
+            "Cannot end the Json structure, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
     public JsonGenerator write(final JsonValue value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        throw new IllegalStateException(
+            "Cannot write JsonValue, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
@@ -114,6 +123,211 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     @Override
     public void flush() {
         throw new UnsupportedOperationException("Not supported yet.");
+    }
+    
+    /**
+     * A JsonGenerator for started JsonObjects.
+     */
+    private final class StartObject extends ConvenientJsonGenerator {
+
+        @Override
+        public JsonGenerator writeStartObject() {
+            throw new IllegalStateException("JsonObject is already started!");
+        }
+
+        @Override
+        public JsonGenerator writeStartObject(final String name) {
+            return new StartObject();
+        }
+
+        @Override
+        public JsonGenerator writeKey(final String name) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public JsonGenerator writeStartArray() {
+            throw new IllegalStateException(
+                "Within a JsonObject, a JsonArray needs to have a key. "
+              + "Write a key first (#writeKey(name)) or start a JsonArray "
+              + "with a name (method writeStartArray(name))."
+            );
+        }
+
+        @Override
+        public JsonGenerator writeStartArray(final String name) {
+            return new StartArray();
+        }
+
+        @Override
+        public JsonGenerator write(final String name, final JsonValue value) {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public JsonGenerator write(final JsonValue value) {
+            throw new IllegalStateException(
+                "Within a JsonObject, a JsonValue needs to have a key. "
+              + "Write a key first (#writeKey(name)), start a JsonObject "
+              + "or a JsonArray with a name or write a key/value pair"
+            );
+        }
+
+        @Override
+        public JsonGenerator writeEnd() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void close() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void flush() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+    }
+    
+    /**
+     * A JsonGenerator for started JsonArrays.
+     */
+    private final class StartArray extends ConvenientJsonGenerator {
+
+        @Override
+        public JsonGenerator writeStartObject() {
+            return new StartObject();
+        }
+
+        @Override
+        public JsonGenerator writeStartObject(final String name) {
+            throw new IllegalStateException(
+                "Within a JsonArray there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator writeKey(final String name) {
+            throw new IllegalStateException(
+                "Within a JsonArray there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator writeStartArray() {
+            return new StartArray();
+        }
+
+        @Override
+        public JsonGenerator writeStartArray(final String name) {
+            throw new IllegalStateException(
+                "Within a JsonArray there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator write(final String name, final JsonValue value) {
+            throw new IllegalStateException(
+                "Within a JsonArray there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator write(final JsonValue value) {
+            throw new IllegalStateException("Not supported yet.");
+        }
+
+        @Override
+        public JsonGenerator writeEnd() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void close() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void flush() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+    }
+    
+    /**
+     * A JsonGenerator which mandates the writing of a JsonValue after a key
+     * is previously added.
+     */
+    private final class WriteJsonValue extends ConvenientJsonGenerator {
+
+        @Override
+        public JsonGenerator writeStartObject() {
+            return new StartObject();
+        }
+
+        @Override
+        public JsonGenerator writeStartObject(final String name) {
+            throw new IllegalStateException(
+                "After a Json key, there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator writeKey(final String name) {
+            throw new IllegalStateException(
+                "Cannot write another key, need a JsonValue."
+            );
+        }
+
+        @Override
+        public JsonGenerator writeStartArray() {
+            return new StartArray();
+        }
+
+        @Override
+        public JsonGenerator writeStartArray(final String name) {
+            throw new IllegalStateException(
+                "After a Json key, there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator write(final String name, final JsonValue value) {
+            throw new IllegalStateException(
+                "After a Json key, there cannot be named Json strucutres, "
+              + "only unnamed JsonArray, JsonObjects or other JsonValues"
+            );
+        }
+
+        @Override
+        public JsonGenerator write(final JsonValue value) {
+            throw new IllegalStateException("Not supported yet.");
+        }
+
+        @Override
+        public JsonGenerator writeEnd() {
+            throw new IllegalStateException(
+                "Cannot and the Json structure here. Need a JsonValue!"
+            );
+        }
+
+        @Override
+        public void close() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public void flush() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
     }
     
 }
