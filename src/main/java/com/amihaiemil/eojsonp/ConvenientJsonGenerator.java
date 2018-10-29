@@ -35,9 +35,6 @@ import javax.json.stream.JsonGenerator;
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
- * @todo #8:30min Add implementations for JsonNumber and JsonString. They should
- *  also be unit tested and used in this class to delegate the convenience
- *  writing methods to the JsonValue ones.
  */
 abstract class ConvenientJsonGenerator implements JsonGenerator {
     
@@ -69,82 +66,98 @@ abstract class ConvenientJsonGenerator implements JsonGenerator {
     
     @Override
     public JsonGenerator write(final String name, final String value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonString(value));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final BigInteger value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final BigDecimal value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final int value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final long value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final double value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String name, final boolean value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonString(value ? "true" : "false"));
+        return this;
     }
 
     @Override
     public JsonGenerator writeNull(final String name) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(name, new RtJsonString("null"));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final String value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonString(value));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final BigDecimal value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final BigInteger value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final int value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final long value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final double value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonNumber(String.valueOf(value)));
+        return this;
     }
 
     @Override
     public JsonGenerator write(final boolean value) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonString(value ? "true" : "false"));
+        return this;
     }
 
     @Override
     public JsonGenerator writeNull() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.write(new RtJsonString("null"));
+        return this;
     }
 
     @Override
