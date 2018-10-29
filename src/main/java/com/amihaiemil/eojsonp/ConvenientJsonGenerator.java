@@ -102,6 +102,7 @@ abstract class ConvenientJsonGenerator implements JsonGenerator {
 
     @Override
     public JsonGenerator write(final String name, final boolean value) {
+        //@checkstyle AvoidInlineConditionals (1 line)
         this.write(name, new RtJsonString(value ? "true" : "false"));
         return this;
     }
@@ -150,6 +151,7 @@ abstract class ConvenientJsonGenerator implements JsonGenerator {
 
     @Override
     public JsonGenerator write(final boolean value) {
+        //@checkstyle AvoidInlineConditionals (1 line)
         this.write(new RtJsonString(value ? "true" : "false"));
         return this;
     }
