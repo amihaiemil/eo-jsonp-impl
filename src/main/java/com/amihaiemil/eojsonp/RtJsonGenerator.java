@@ -25,14 +25,21 @@
  */
 package com.amihaiemil.eojsonp;
 
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import javax.json.JsonException;
 import javax.json.JsonValue;
 import javax.json.stream.JsonGenerator;
 
 /**
  * Base JsonGenerator implementation. Rt stands for "runtime".
+ * 
+ * This JsonGenerator works as a finite automata composed of different
+ * JsonGenerator implementations (each node is a JsonGenerator which knows
+ * exactly what operations are permitted in that moment).
+ * 
  * @author Mihai Andronache (amihaiemil@gmail.com)
  * @version $Id$
  * @since 0.0.1
@@ -62,54 +69,71 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     
     @Override
     public JsonGenerator writeStartObject() {
-        return new StartObject();
+        try {
+            this.writer.write("{");
+        } catch (final IOException ex) {
+            throw new IllegalStateException(
+                "IOException when trying to start writing JsonObject", ex
+            );
+        }
+        return new StartObject(this);
     }
 
     @Override
     public JsonGenerator writeStartObject(final String name) {
-        throw new IllegalStateException(
-            "Cannot write named JsonArray, base Json structure is not "
+        throw new JsonException(
+            "Cannot write a named JsonArray, base Json structure is not "
           + "started yet. Use #writeStartObject() or #writeStartObject()."
         );
     }
 
     @Override
     public JsonGenerator writeKey(final String name) {
-        return new WriteJsonValue();
+        throw new JsonException(
+            "Cannot write a named JsonValue, base Json structure is not "
+          + "started yet. Use #writeStartObject() or #writeStartObject()."
+        );
     }
 
     @Override
     public JsonGenerator writeStartArray() {
-        return new StartArray();
+        try {
+            this.writer.write("[");
+        } catch (final IOException ex) {
+            throw new IllegalStateException(
+                "IOException when trying to start writing JsonArray", ex
+            );
+        }
+        return new StartArray(this);
     }
 
     @Override
     public JsonGenerator writeStartArray(final String name) {
-        throw new IllegalStateException(
-            "Cannot write named JsonArray, base Json structure is not "
+        throw new JsonException(
+            "Cannot write a named JsonArray, base Json structure is not "
           + "started yet. Use #writeStartObject() or #writeStartObject()."
         );
     }
 
     @Override
     public JsonGenerator write(final String name, final JsonValue value) {
-        throw new IllegalStateException(
-            "Cannot write named JsonValue, base Json structure is not "
+        throw new JsonException(
+            "Cannot write a named JsonValue, base Json structure is not "
           + "started yet. Use #writeStartObject() or #writeStartObject()."
         );
     }
 
     @Override
     public JsonGenerator writeEnd() {
-        throw new IllegalStateException(
-            "Cannot end the Json structure, base Json structure is not "
+        throw new JsonException(
+            "Cannot end the Json structure, since it is not "
           + "started yet. Use #writeStartObject() or #writeStartObject()."
         );
     }
 
     @Override
     public JsonGenerator write(final JsonValue value) {
-        throw new IllegalStateException(
+        throw new JsonException(
             "Cannot write JsonValue, base Json structure is not "
           + "started yet. Use #writeStartObject() or #writeStartObject()."
         );
@@ -117,19 +141,44 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
     @Override
     public void close() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            this.writer.close();
+        } catch (final IOException ex) {
+            throw new IllegalStateException(
+                "IOException when trying to close the Writer.", ex
+            );
+        }
     }
 
     @Override
     public void flush() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        try {
+            this.writer.flush();
+        } catch (final IOException ex) {
+            throw new IllegalStateException(
+                "IOException when trying to flush the Writer.", ex
+            );
+        }
     }
     
     /**
      * A JsonGenerator for started JsonObjects.
      */
-    private final class StartObject extends ConvenientJsonGenerator {
-
+    final class StartObject extends ConvenientJsonGenerator {
+        
+        /**
+         * Parent JsonGenerator which started this object generator.
+         */
+        private final JsonGenerator parent;
+        
+        /**
+         * Ctor.
+         * @param parent Parent generator.
+         */
+        StartObject(final JsonGenerator parent) {
+            this.parent = parent;
+        }
+        
         @Override
         public JsonGenerator writeStartObject() {
             throw new IllegalStateException("JsonObject is already started!");
@@ -137,12 +186,34 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator writeStartObject(final String name) {
-            return new StartObject();
+            try {
+                RtJsonGenerator.this.writer.write(
+                    new RtJsonString(name).toString() + ":{"
+                );
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonObject with key\""
+                  + name + "\".",
+                    ex
+                );
+            }
+            return new StartObject(this);
         }
 
         @Override
         public JsonGenerator writeKey(final String name) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write(
+                    new RtJsonString(name).toString() + ":"
+                );
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonValue with key \""
+                  + name + "\".",
+                    ex
+                );
+            }
+            return new ExpectJsonValue(this);
         }
 
         @Override
@@ -156,12 +227,35 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator writeStartArray(final String name) {
-            return new StartArray();
+            try {
+                RtJsonGenerator.this.writer.write(
+                    new RtJsonString(name).toString() + ":["
+                );
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonArray with key \""
+                  + name + "\".",
+                    ex
+                );
+            }
+            return new StartArray(this);
         }
 
         @Override
         public JsonGenerator write(final String name, final JsonValue value) {
-            throw new UnsupportedOperationException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write(
+                    new RtJsonString(name).toString() + ":" + value.toString()
+                    + ","
+                );
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to write key \""
+                  + name + "\" and value \"" + value.toString() + "\".",
+                    ex
+                );
+            }
+            return this;
         }
 
         @Override
@@ -175,17 +269,24 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator writeEnd() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write("},");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to end the JsonObject", ex
+                );
+            }
+            return this.parent;
         }
 
         @Override
         public void close() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.close();
         }
 
         @Override
         public void flush() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.flush();
         }
 
     }
@@ -193,11 +294,31 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     /**
      * A JsonGenerator for started JsonArrays.
      */
-    private final class StartArray extends ConvenientJsonGenerator {
+    final class StartArray extends ConvenientJsonGenerator {
 
+        /**
+         * Parent JsonGenerator which started this array generator.
+         */
+        private final JsonGenerator parent;
+        
+        /**
+         * Ctor.
+         * @param parent Parent generator.
+         */
+        StartArray(final JsonGenerator parent) {
+            this.parent = parent;
+        }
+        
         @Override
         public JsonGenerator writeStartObject() {
-            return new StartObject();
+            try {
+                RtJsonGenerator.this.writer.write("{");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonObject", ex
+                );
+            }
+            return new StartObject(this);
         }
 
         @Override
@@ -218,7 +339,14 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator writeStartArray() {
-            return new StartArray();
+            try {
+                RtJsonGenerator.this.writer.write("[");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonArray", ex
+                );
+            }
+            return new StartArray(this);
         }
 
         @Override
@@ -239,22 +367,38 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator write(final JsonValue value) {
-            throw new IllegalStateException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write(value.toString() + ",");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to write JsonValue \""
+                  + value.toString() + "\".",
+                    ex
+                );
+            }
+            return new StartArray(this);
         }
 
         @Override
         public JsonGenerator writeEnd() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write("],");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to end the JsonObject", ex
+                );
+            }
+            return this.parent;
         }
 
         @Override
         public void close() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.close();
         }
 
         @Override
         public void flush() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.flush();
         }
 
     }
@@ -263,11 +407,32 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
      * A JsonGenerator which mandates the writing of a JsonValue after a key
      * is previously added.
      */
-    private final class WriteJsonValue extends ConvenientJsonGenerator {
+    final class ExpectJsonValue extends ConvenientJsonGenerator {
 
+        /**
+         * Parent JsonGenerator which wrote the key for the JsonValue generated
+         * here.
+         */
+        private final JsonGenerator parent;
+        
+        /**
+         * Ctor.
+         * @param parent Parent generator.
+         */
+        ExpectJsonValue(final JsonGenerator parent) {
+            this.parent = parent;
+        }
+        
         @Override
         public JsonGenerator writeStartObject() {
-            return new StartObject();
+            try {
+                RtJsonGenerator.this.writer.write("{");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonObject", ex
+                );
+            }
+            return new StartObject(this.parent);
         }
 
         @Override
@@ -287,7 +452,14 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator writeStartArray() {
-            return new StartArray();
+            try {
+                RtJsonGenerator.this.writer.write("[");
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to start JsonArray", ex
+                );
+            }
+            return new StartArray(this.parent);
         }
 
         @Override
@@ -308,24 +480,33 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
 
         @Override
         public JsonGenerator write(final JsonValue value) {
-            throw new IllegalStateException("Not supported yet.");
+            try {
+                RtJsonGenerator.this.writer.write(value.toString());
+            } catch (final IOException ex) {
+                throw new IllegalStateException(
+                    "IOException when trying to write JsonValue \""
+                  + value.toString() + "\".",
+                    ex
+                );
+            }
+            return this.parent;
         }
 
         @Override
         public JsonGenerator writeEnd() {
             throw new IllegalStateException(
-                "Cannot and the Json structure here. Need a JsonValue!"
+                "Cannot end the Json structure here. Need a JsonValue!"
             );
         }
 
         @Override
         public void close() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.close();
         }
 
         @Override
         public void flush() {
-            throw new UnsupportedOperationException("Not supported yet.");
+            this.parent.flush();
         }
 
     }
