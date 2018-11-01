@@ -76,7 +76,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                 "IOException when trying to start writing JsonObject", ex
             );
         }
-        return new StartObject(this);
+        return new ContinueObject(this);
     }
 
     @Override
@@ -104,7 +104,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                 "IOException when trying to start writing JsonArray", ex
             );
         }
-        return new StartArray(this);
+        return new ContinueArray(this);
     }
 
     @Override
@@ -162,9 +162,9 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     }
     
     /**
-     * A JsonGenerator for started JsonObjects.
+     * For continuing the generation of a JsonObject.
      */
-    final class StartObject extends ConvenientJsonGenerator {
+    final class ContinueObject extends ConvenientJsonGenerator {
         
         /**
          * Parent JsonGenerator which started this object generator.
@@ -175,7 +175,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
          * Ctor.
          * @param parent Parent generator.
          */
-        StartObject(final JsonGenerator parent) {
+        ContinueObject(final JsonGenerator parent) {
             this.parent = parent;
         }
         
@@ -197,7 +197,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     ex
                 );
             }
-            return new StartObject(this);
+            return new ContinueObject(this);
         }
 
         @Override
@@ -238,7 +238,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     ex
                 );
             }
-            return new StartArray(this);
+            return new ContinueArray(this);
         }
 
         @Override
@@ -292,9 +292,9 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
     }
     
     /**
-     * A JsonGenerator for started JsonArrays.
+     * For continuing the generator of a JsonArray.
      */
-    final class StartArray extends ConvenientJsonGenerator {
+    final class ContinueArray extends ConvenientJsonGenerator {
 
         /**
          * Parent JsonGenerator which started this array generator.
@@ -305,7 +305,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
          * Ctor.
          * @param parent Parent generator.
          */
-        StartArray(final JsonGenerator parent) {
+        ContinueArray(final JsonGenerator parent) {
             this.parent = parent;
         }
         
@@ -318,7 +318,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     "IOException when trying to start JsonObject", ex
                 );
             }
-            return new StartObject(this);
+            return new ContinueObject(this);
         }
 
         @Override
@@ -346,7 +346,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     "IOException when trying to start JsonArray", ex
                 );
             }
-            return new StartArray(this);
+            return new ContinueArray(this);
         }
 
         @Override
@@ -376,7 +376,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     ex
                 );
             }
-            return new StartArray(this);
+            return new ContinueArray(this);
         }
 
         @Override
@@ -432,7 +432,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     "IOException when trying to start JsonObject", ex
                 );
             }
-            return new StartObject(this.parent);
+            return new ContinueObject(this.parent);
         }
 
         @Override
@@ -459,7 +459,7 @@ final class RtJsonGenerator extends ConvenientJsonGenerator {
                     "IOException when trying to start JsonArray", ex
                 );
             }
-            return new StartArray(this.parent);
+            return new ContinueArray(this.parent);
         }
 
         @Override

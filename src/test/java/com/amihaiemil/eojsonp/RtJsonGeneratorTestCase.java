@@ -55,7 +55,7 @@ public final class RtJsonGeneratorTestCase {
             gen.writeStartObject(),
             Matchers.allOf(
                 Matchers.notNullValue(),
-                Matchers.instanceOf(RtJsonGenerator.StartObject.class)
+                Matchers.instanceOf(RtJsonGenerator.ContinueObject.class)
             )
         );
         MatcherAssert.assertThat(written.toString(), Matchers.equalTo("{"));
@@ -72,7 +72,7 @@ public final class RtJsonGeneratorTestCase {
             gen.writeStartArray(),
             Matchers.allOf(
                 Matchers.notNullValue(),
-                Matchers.instanceOf(RtJsonGenerator.StartArray.class)
+                Matchers.instanceOf(RtJsonGenerator.ContinueArray.class)
             )
         );
         MatcherAssert.assertThat(written.toString(), Matchers.equalTo("["));
