@@ -7,4 +7,30 @@
 [![We recommend IntelliJ IDEA](http://amihaiemil.github.io/images/intellij-idea-recommend.svg)](https://www.jetbrains.com/idea/)
 
 
-An elegant, object-oriented, implementation of the JSON-P specification (JSR 374)
+An elegant, object-oriented, implementation of the JSON-P specification (JSR 374).
+
+### Maven dependency
+
+The library comes as a maven dependency:
+
+```
+<dependency>
+    <groupId>com.amihaiemil.web</groupId>
+    <artifactId>eo-jsonp-impl</artifactId>
+    <version>not-yet-released</version>
+</dependency>
+```
+
+If you are not using Maven, you can also download the <a href="#">fat</a> jar.
+
+### Contributing 
+
+If you would like to contribute, just open an issue or a PR.
+
+Make sure the maven build:
+
+``$mvn clean install -Pcheckstyle``
+
+passes before making a PR. [Checkstyle](http://checkstyle.sourceforge.net/) will make sure
+you're following our code style and guidlines.
+
