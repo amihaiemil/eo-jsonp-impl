@@ -7,7 +7,9 @@
 [![We recommend IntelliJ IDEA](http://amihaiemil.github.io/images/intellij-idea-recommend.svg)](https://www.jetbrains.com/idea/)
 
 
-An elegant, object-oriented, implementation of the JSON-P specification (JSR 374).
+An elegant, object-oriented, implementation of the [JSON-P specification (JSR 374)](https://javaee.github.io/jsonp/).
+
+From the user's point of view, this implementation should be no different than others (it's supposed to respect the API, after all). However, it has a better internal design, bigger test coverage, easier extensibility etc. It will also provide a few proprietary classes to give the user more power especially when it comes to Polymorphism.
 
 ### Maven dependency
 
