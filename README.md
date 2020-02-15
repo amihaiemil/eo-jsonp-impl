@@ -15,7 +15,7 @@ From the user's point of view, this implementation should be no different than o
 
 The library comes as a maven dependency:
 
-```
+```xml
 <dependency>
     <groupId>com.amihaiemil.web</groupId>
     <artifactId>eo-jsonp-impl</artifactId>
